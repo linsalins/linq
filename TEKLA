@@ -1,0 +1,22 @@
+import clr
+clr.AddReference('Tekla.Structures.Model')
+from Tekla.Structures.Model import Model
+from Tekla.Structures.Model.UI import Picker
+from System.IO import Directory, Path
+
+# Set the folder path where the components are located
+folder_path = r'C:\Path\To\Component\Folder'
+
+# Get the component catalog
+catalog = Model.GetCatalogRepository().GetCatalog('Components')
+
+# Loop through all files in the folder
+for file in Directory.GetFiles(folder_path):
+    # Check if the file is a Tekla component file (.inp)
+    if Path.GetExtension(file).ToLower() == '.inp':
+        # Load the component into the catalog
+        component = catalog.LoadComponent(file)
+        if component:
+            print(f'Loaded component: {component.Name}')
+        else:
+            print(f'Failed to load component: {file}')
